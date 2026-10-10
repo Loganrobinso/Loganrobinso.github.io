@@ -99,7 +99,62 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
 .tags span{font-family:var(--f-mono);font-size:.6875rem;color:var(--muted);border:1px solid var(--line);padding:2px 7px;border-radius:2px}
 .flag{color:var(--accent)}
+.proj.wide{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.1fr;gap:12px 32px;align-items:center}
+.proj.wide>div{display:flex;flex-direction:column;gap:10px;min-width:0}
+.proj.wide>.tags{flex-direction:row;flex-wrap:wrap;gap:6px}
+@media (max-width:720px){.proj.wide{grid-template-columns:1fr}}
 @media (max-width:720px){.projects{grid-template-columns:1fr}}
+
+/* chart series colors (validated categorical slots 1-3, light + dark) */
+:root{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--s1:#3987e5;--s2:#d95926;--s3:#199e70}}
+:root[data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70}
+
+/* featured case study */
+.case{background:var(--surface);border:1px solid var(--line);margin-bottom:32px}
+.case-top{display:grid;grid-template-columns:1fr 1.35fr;gap:32px;padding:28px;align-items:center}
+.case-top>*{min-width:0}
+.case h3{font-family:var(--f-display);font-weight:600;text-transform:uppercase;font-size:var(--s2);line-height:1;margin:10px 0 14px;text-wrap:balance}
+.case .lead{color:var(--muted);margin:0 0 18px;max-width:52ch}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line)}
+.stat{padding:18px 20px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--f-display);font-weight:800;font-size:2.1rem;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:6px;font-size:.8125rem;color:var(--muted);line-height:1.35}
+.finding{display:grid;grid-template-columns:1fr 1.35fr;gap:32px;padding:28px;border-top:1px solid var(--line);align-items:start}
+.finding>*{min-width:0}
+.finding .num{font-family:var(--f-mono);font-size:.75rem;color:var(--accent);letter-spacing:.08em}
+.finding h4{font-size:var(--s1);line-height:1.25;margin:6px 0 10px;font-weight:600;text-wrap:balance}
+.finding p{margin:0 0 .8em;color:var(--muted);font-size:.9375rem;max-width:56ch}
+.finding p strong{color:var(--fg);font-weight:600}
+.fig{margin:0}
+.fig .plate{background:#fff;border:1px solid var(--line);border-radius:3px;padding:8px}
+.fig img{display:block;width:100%;height:auto}
+.fig figcaption{font-family:var(--f-mono);font-size:.6875rem;color:var(--muted);margin-top:8px;line-height:1.5}
+.thumb{max-width:320px;margin-top:14px}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+@media (max-width:820px){.case-top,.finding{grid-template-columns:1fr;gap:20px;padding:22px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* inline svg charts */
+.chart{display:block;width:100%;height:auto;overflow:visible}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .axis{fill:var(--muted);font-family:var(--f-mono);font-size:11px}
+.chart .lab{font-family:var(--f-body);font-size:12px;fill:var(--fg)}
+.chart .val{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.chart .ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .pt{stroke:var(--surface);stroke-width:2;cursor:default}
+.chart .pt:focus{outline:none;stroke:var(--fg)}
+.chart .bar{stroke:var(--line);stroke-width:2;stroke-linecap:round}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 8px;padding:0;list-style:none;font-size:.8125rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.datatable summary{font-family:var(--f-mono);font-size:.6875rem;color:var(--muted);cursor:pointer;margin-top:8px}
+.datatable table{border-collapse:collapse;font-family:var(--f-mono);font-size:.75rem;margin-top:8px;font-variant-numeric:tabular-nums}
+.datatable th,.datatable td{padding:4px 12px 4px 0;text-align:left;border-bottom:1px solid var(--line)}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--fg);color:var(--bg);font-family:var(--f-mono);font-size:.75rem;padding:6px 8px;border-radius:3px;opacity:0;transition:opacity .1s;white-space:nowrap}
+.tip.on{opacity:1}
+.mini{margin-top:6px}
+@media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
+@media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
 
 /* pubs */
 .pubs{list-style:none;margin:0;padding:0;counter-reset:p}
@@ -198,9 +253,154 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
       <div class="head">
         <div class="label">research &amp; projects</div>
         <h2>Selected work</h2>
-        <!-- <p>optional one-line intro</p> -->
+        <p>Each project below leads with what I found, including the results that didn't go the way I expected.</p>
       </div>
+
+      <article class="case" aria-labelledby="pinn-title">
+        <div class="case-top">
+          <div>
+            <div class="label">Featured · side project · PyTorch</div>
+            <h3 id="pinn-title">Rebuilding a temperature field from six sensors, with physics as the teacher</h3>
+            <p class="lead">A physics-informed neural network that reconstructs a transient temperature field from sparse point sensors and noisy low-resolution camera frames. The heat equation and convective boundary conditions are part of the loss. I checked every result against finite-difference solvers I wrote myself, first on a 2D plate and then on a 3D finned aluminum heat sink.</p>
+            <div class="tags"><span>PINN</span><span>multimodal fusion</span><span>heat transfer</span><span>finite difference</span><span>GPU</span><span>Docker</span></div>
+            <!-- Uncomment once the repo is public:
+            <div class="links" style="margin-top:16px"><a class="btn" href="https://github.com/USERNAME/REPO">code →</a></div> -->
+          </div>
+          <figure class="fig">
+            <div class="plate"><img src="img/pinn-heatsink-3d.webp" width="1295" height="660" alt="3D render of a 13-fin aluminum heat sink colored by temperature rise, hottest at the base center under the chip and cooling toward the outer fins" loading="lazy"></div>
+            <figcaption>Ground truth from my 3D GPU solver: 13-fin aluminum heat sink, 20 s after a chip turns on at the base center. Peak rise ≈ 13 K.</figcaption>
+          </figure>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><b>0.3%</b><span>reconstruction error from 6 sensors, as a share of the field's range</span></div>
+          <div class="stat"><b>812k</b><span>cells in the 3D solve, ~58,500 timesteps in under a minute on GPU</span></div>
+          <div class="stat"><b>11→4 K</b><span>max error on the heat sink after fixing how the PINN samples the domain</span></div>
+          <div class="stat"><b>47</b><span>unit tests, including energy conservation and analytical decay</span></div>
+        </div>
+
+        <div class="finding">
+          <div>
+            <div class="num">FINDING 01</div>
+            <h4>Six sensors are enough when the physics is right</h4>
+            <p>With only six point sensors plus the heat equation, the network reconstructs the whole plate. Ten minutes into heating, its error is <strong>within about 0.3% of the field's range</strong>. The physics fills in everything the sensors can't see.</p>
+          </div>
+          <figure class="fig">
+            <div class="plate"><img src="img/pinn-sensors-only.webp" width="1300" height="495" alt="Two heat maps side by side: the true temperature field at 600 s with six sensor locations marked, and the PINN reconstruction, which looks nearly identical" loading="lazy"></div>
+            <figcaption>Left: ground truth at t = 600 s, sensors in cyan. Right: PINN trained on those six traces only.</figcaption>
+          </figure>
+        </div>
+
+        <div class="finding">
+          <div>
+            <div class="num">FINDING 02</div>
+            <h4>Adding a second modality made it worse</h4>
+            <p>I trained the same network three ways: sensors only, camera only, and both fused. Fusion helped early in the transient (<strong>0.39 K vs 0.53 K</strong> at 88 s). Later on, the noisy camera pulled the fit toward its own noise, and sensors alone came out ahead (<strong>0.25 K vs 0.53 K</strong> at 600 s).</p>
+            <p>A second modality only pays off when it fills a gap the stronger one can't see. That question drives my PhD work too.</p>
+            <figure class="fig thumb">
+              <div class="plate"><img src="img/pinn-camera-input.webp" width="1600" height="675" alt="A blocky, noisy low-resolution camera frame next to the smooth true temperature field at the same time" loading="lazy"></div>
+              <figcaption>The camera modality: a downsampled, noisy frame (left) vs the true field (right).</figcaption>
+            </figure>
+          </div>
+          <figure class="fig">
+            <ul class="legend" aria-hidden="true">
+              <li><i style="background:var(--s1)"></i>sensors only</li>
+              <li><i style="background:var(--s2)"></i>camera only</li>
+              <li><i style="background:var(--s3)"></i>fused</li>
+            </ul>
+            <svg class="chart" viewBox="0 0 540 262" role="img" aria-labelledby="fz-t fz-d">
+              <title id="fz-t">Mean reconstruction error over time for three training conditions</title>
+              <desc id="fz-d">Camera only stays worst, 0.77 to 0.91 K. Fused starts best at 0.39 K but rises to 0.53 K by 600 s. Sensors only starts at 0.53 K and drops to 0.22 then 0.25 K.</desc>
+              <g class="grid">
+                <line x1="52" x2="420" y1="20" y2="20"/><line x1="52" x2="420" y1="70" y2="70"/>
+                <line x1="52" x2="420" y1="120" y2="120"/><line x1="52" x2="420" y1="170" y2="170"/>
+                <line x1="52" x2="420" y1="220" y2="220" style="stroke:var(--muted)"/>
+              </g>
+              <g class="axis" text-anchor="end">
+                <text x="44" y="24">1.00</text><text x="44" y="74">0.75</text><text x="44" y="124">0.50</text>
+                <text x="44" y="174">0.25</text><text x="44" y="224">0</text>
+              </g>
+              <g class="axis" text-anchor="middle">
+                <text x="52" y="238">0</text><text x="113.3" y="238">100</text><text x="174.7" y="238">200</text>
+                <text x="236" y="238">300</text><text x="297.3" y="238">400</text><text x="358.7" y="238">500</text><text x="420" y="238">600</text>
+                <text x="236" y="258">time since heating starts (s)</text>
+              </g>
+              <text class="axis" x="0" y="10">mean |error| (K)</text>
+              <polyline class="ln" style="stroke:var(--s2)" points="106,66 235.4,58 420,38"/>
+              <polyline class="ln" style="stroke:var(--s3)" points="106,142 235.4,158 420,114"/>
+              <polyline class="ln" style="stroke:var(--s1)" points="106,114 235.4,176 420,170"/>
+              <g>
+                <circle class="pt" tabindex="0" r="5" cx="106" cy="66" style="fill:var(--s2)" data-tip="camera only · 88 s · 0.77 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="235.4" cy="58" style="fill:var(--s2)" data-tip="camera only · 299 s · 0.81 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="420" cy="38" style="fill:var(--s2)" data-tip="camera only · 600 s · 0.91 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="106" cy="142" style="fill:var(--s3)" data-tip="fused · 88 s · 0.39 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="235.4" cy="158" style="fill:var(--s3)" data-tip="fused · 299 s · 0.31 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="420" cy="114" style="fill:var(--s3)" data-tip="fused · 600 s · 0.53 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="106" cy="114" style="fill:var(--s1)" data-tip="sensors only · 88 s · 0.53 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="235.4" cy="176" style="fill:var(--s1)" data-tip="sensors only · 299 s · 0.22 K"/>
+                <circle class="pt" tabindex="0" r="5" cx="420" cy="170" style="fill:var(--s1)" data-tip="sensors only · 600 s · 0.25 K"/>
+              </g>
+              <g>
+                <text class="lab" x="430" y="42">camera <tspan class="val">0.91</tspan></text>
+                <text class="lab" x="430" y="118">fused <tspan class="val">0.53</tspan></text>
+                <text class="lab" x="430" y="174">sensors <tspan class="val">0.25</tspan></text>
+              </g>
+            </svg>
+            <figcaption>Mean absolute error against the finite-difference ground truth. Same network, same physics; only the data term changes.</figcaption>
+            <details class="datatable"><summary>show data</summary>
+              <table><thead><tr><th>condition</th><th>88 s</th><th>299 s</th><th>600 s</th></tr></thead>
+                <tbody><tr><td>sensors only</td><td>0.53 K</td><td>0.22 K</td><td>0.25 K</td></tr>
+                <tr><td>camera only</td><td>0.77 K</td><td>0.81 K</td><td>0.91 K</td></tr>
+                <tr><td>fused</td><td>0.39 K</td><td>0.31 K</td><td>0.53 K</td></tr></tbody></table>
+            </details>
+          </figure>
+        </div>
+
+        <div class="finding">
+          <div>
+            <div class="num">FINDING 03</div>
+            <h4>The loss curve said it worked. It hadn't.</h4>
+            <p>On the heat sink, physics-only training converged with clean loss curves, yet the fins never warmed above 0 K. The heat source is a 1.5 mm spot in a 28 mm domain split across 13 fins. Random collocation points almost never landed on it, so a cold field satisfied the equation nearly everywhere the network checked.</p>
+            <p>Concentrating samples at the source and adding six virtual sensors cut max error from <strong>~11 K to ~4 K</strong> on a field that peaks near 13 K. That's still imperfect, and the figure shows where: the outer fins run warm.</p>
+          </div>
+          <figure class="fig">
+            <div class="plate"><img src="img/pinn-heatsink-pinn.webp" width="525" height="410" alt="Side-view slices of the heat sink at 20 s: ground truth on top and the PINN prediction below, both hottest at the base center; the PINN's outer fins are slightly warmer" loading="lazy" style="max-width:420px;margin-inline:auto"></div>
+            <figcaption>Side view at t = 20 s. Top: solver ground truth (sensors in cyan). Bottom: PINN with physics + sensors.</figcaption>
+          </figure>
+        </div>
+      </article>
+
       <div class="projects">
+        <article class="proj wide">
+          <div>
+          <div class="where"><span class="label">UTSA · VAIL</span><span class="label flag">in revision</span></div>
+          <h3>When does multimodal fusion help anomaly detection?</h3>
+          <p>A controlled comparison of 8 fusion mechanisms for image-and-text industrial anomaly detection across 5 datasets. As samples get harder, detection holds steady while cross-modal retrieval collapses, on the same images, embeddings and model. Aggregate metrics hide this failure.</p>
+          </div>
+          <div>
+          <!-- VERIFY these four numbers against the final standard-training tables before publishing. -->
+          <ul class="legend mini" aria-hidden="true"><li><i style="background:var(--s1)"></i>easy samples</li><li><i style="background:var(--s2)"></i>hard samples</li></ul>
+          <svg class="chart" viewBox="0 0 460 132" role="img" aria-labelledby="dd-t dd-d">
+            <title id="dd-t">Easy vs hard samples: detection vs retrieval</title>
+            <desc id="dd-d">Detection AUROC goes from 0.997 on easy samples to 0.983 on hard. Retrieval top-1 accuracy falls from 0.857 to 0.477, a 44 percent drop.</desc>
+            <g class="grid"><line x1="130" x2="130" y1="18" y2="110"/><line x1="233.3" x2="233.3" y1="18" y2="110"/><line x1="336.7" x2="336.7" y1="18" y2="110"/><line x1="440" x2="440" y1="18" y2="110"/></g>
+            <g class="axis" text-anchor="middle"><text x="130" y="126">0.4</text><text x="233.3" y="126">0.6</text><text x="336.7" y="126">0.8</text><text x="440" y="126">1.0</text></g>
+            <text class="lab" x="0" y="44">Detection</text><text class="val" x="0" y="58">AUROC</text>
+            <text class="lab" x="0" y="90">Retrieval</text><text class="val" x="0" y="104">top-1 accuracy</text>
+            <line x1="431.2" x2="438.5" y1="48" y2="48" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
+            <circle class="pt" tabindex="0" r="5" cx="431.2" cy="48" style="fill:var(--s2)" data-tip="detection · hard · 0.983"/>
+            <circle class="pt" tabindex="0" r="5" cx="438.5" cy="48" style="fill:var(--s1)" data-tip="detection · easy · 0.997"/>
+            <text class="val" x="426" y="34" text-anchor="end">0.997 → 0.983</text>
+            <line x1="169.8" x2="366.1" y1="94" y2="94" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
+            <circle class="pt" tabindex="0" r="5" cx="366.1" cy="94" style="fill:var(--s1)" data-tip="retrieval · easy · 0.857"/>
+            <circle class="pt" tabindex="0" r="5" cx="169.8" cy="94" style="fill:var(--s2)" data-tip="retrieval · hard · 0.477"/>
+            <text class="val" x="366.1" y="80" text-anchor="middle">0.857</text>
+            <text class="val" x="169.8" y="80" text-anchor="middle">0.477</text>
+            <text class="lab" x="268" y="84" text-anchor="middle" style="font-weight:600">−44%</text>
+          </svg>
+          </div>
+          <div class="tags" style="grid-column:1/-1"><span>anomaly detection</span><span>vision-language</span><span>cross-validation</span></div>
+        </article>
         <article class="proj">
           <div class="where"><span class="label">ORNL · GRO</span><span class="label flag">ongoing</span></div>
           <h3>Real-time processing of thermal video from powder bed fusion</h3>
@@ -239,19 +439,6 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           <h3>Propellant management device</h3>
           <p>Used surface-tension geometry to control fluid transport in a tightly constrained tank. Balanced micro-porosity against structural strength, delivered within a 15% budget constraint, and checked the design against CFD and test data.</p>
           <div class="tags"><span>fluids</span><span>CFD</span><span>design for manufacture</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">UTSA · VAIL</span><span class="label flag">under review</span></div>
-          <h3>When does multimodal fusion help anomaly detection?</h3>
-          <p>A controlled comparison of fusion mechanisms for image-and-text industrial anomaly detection. On hard samples, detection holds steady while retrieval collapses, a failure that aggregate metrics hide. Details after review.</p>
-          <div class="tags"><span>anomaly detection</span><span>vision-language</span><span>cross-validation</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">Side project</span><span class="label flag">in progress</span></div>
-          <h3>Multimodal PINN for transient heat conduction</h3>
-          <p>A physics-informed neural network that fuses sparse point-sensor traces with occasional noisy full-field snapshots, using the heat equation as a loss. Benchmarked against a finite-difference solver and single-modality baselines.</p>
-          <!-- Link the repo when public: <a href="https://github.com/...">code →</a> -->
-          <div class="tags"><span>PINN</span><span>heat transfer</span><span>finite difference</span><span>Docker</span></div>
         </article>
       </div>
     </div>
@@ -350,7 +537,6 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <!-- Add when ready:
         <dt>github</dt><dd><a href="https://github.com/USERNAME">@USERNAME</a></dd>
         <dt>scholar</dt><dd><a href="https://scholar.google.com/citations?user=ID">Google Scholar</a></dd> -->
-        <dt>affiliation</dt><dd>VAIL · UTSA</dd>
         <dt>lab</dt><dd>VAIL · UTSA</dd>
         <dt>located</dt><dd>San Antonio, TX</dd>
       </dl>
@@ -362,7 +548,20 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
   <div class="wrap mono">© 2026 Logan Robinson · plain HTML, no build step</div>
 </footer>
 
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
 <script>
+// chart tooltips: hover or keyboard-focus any [data-tip] mark
+(function(){
+  const tip=document.getElementById('tip');
+  function show(el){const r=el.getBoundingClientRect();tip.textContent=el.dataset.tip;tip.classList.add('on');
+    const w=tip.offsetWidth;let x=r.left+r.width/2-w/2;x=Math.max(8,Math.min(x,innerWidth-w-8));
+    tip.style.left=x+'px';tip.style.top=(r.top-34)+'px'}
+  function hide(){tip.classList.remove('on')}
+  document.querySelectorAll('[data-tip]').forEach(el=>{
+    el.addEventListener('pointerenter',()=>show(el));el.addEventListener('pointerleave',hide);
+    el.addEventListener('focus',()=>show(el));el.addEventListener('blur',hide)});
+  addEventListener('scroll',hide,{passive:true});
+})();
 (function(){
   const cv=document.getElementById('scan'); if(!cv) return;
   const ctx=cv.getContext('2d'); const N=96, px=cv.width/N;
