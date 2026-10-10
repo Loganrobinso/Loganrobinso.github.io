@@ -267,7 +267,13 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
             <div class="links" style="margin-top:16px"><a class="btn" href="https://github.com/USERNAME/REPO">code →</a></div> -->
           </div>
           <figure class="fig">
-            <div class="plate"><img src="img/pinn-heatsink-3d.webp" width="1295" height="660" alt="3D render of a 13-fin aluminum heat sink colored by temperature rise, hottest at the base center under the chip and cooling toward the outer fins" loading="lazy"></div>
+            <div class="plate">
+              <!-- copy docs/heatsink_3d_render.mp4 and .gif from the PINN repo into img/ -->
+              <video id="hs-video" width="896" height="484" autoplay muted loop playsinline preload="metadata" aria-label="3D heat sink colored by temperature rise, slowly swinging side to side; hottest at the base center under the chip, cooling toward the outer fins" style="display:block;width:100%;height:auto">
+                <source src="img/heatsink_3d_render.mp4" type="video/mp4">
+                <img src="img/heatsink_3d_render.gif" width="646" height="349" alt="3D heat sink colored by temperature rise, hottest at the base center under the chip, cooling toward the outer fins">
+              </video>
+            </div>
             <figcaption>Ground truth from my 3D GPU solver: 13-fin aluminum heat sink, 20 s after a chip turns on at the base center. Peak rise ≈ 13 K.</figcaption>
           </figure>
         </div>
@@ -378,25 +384,25 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           <p>A controlled comparison of 8 fusion mechanisms for image-and-text industrial anomaly detection across 5 datasets. As samples get harder, detection holds steady while cross-modal retrieval collapses, on the same images, embeddings and model. Aggregate metrics hide this failure.</p>
           </div>
           <div>
-          <!-- VERIFY these four numbers against the final standard-training tables before publishing. -->
+          <!-- AAGMF on MVTec, standard training, 5-fold CV mean (results/mvtec/sweep_cv_comparison_nocurriculum.json) -->
           <ul class="legend mini" aria-hidden="true"><li><i style="background:var(--s1)"></i>easy samples</li><li><i style="background:var(--s2)"></i>hard samples</li></ul>
           <svg class="chart" viewBox="0 0 460 132" role="img" aria-labelledby="dd-t dd-d">
             <title id="dd-t">Easy vs hard samples: detection vs retrieval</title>
-            <desc id="dd-d">Detection AUROC goes from 0.997 on easy samples to 0.983 on hard. Retrieval top-1 accuracy falls from 0.857 to 0.477, a 44 percent drop.</desc>
+            <desc id="dd-d">Detection AUROC goes from 0.998 on easy samples to 0.986 on hard. Retrieval top-1 accuracy falls from 0.841 to 0.522, a 38 percent drop.</desc>
             <g class="grid"><line x1="130" x2="130" y1="18" y2="110"/><line x1="233.3" x2="233.3" y1="18" y2="110"/><line x1="336.7" x2="336.7" y1="18" y2="110"/><line x1="440" x2="440" y1="18" y2="110"/></g>
             <g class="axis" text-anchor="middle"><text x="130" y="126">0.4</text><text x="233.3" y="126">0.6</text><text x="336.7" y="126">0.8</text><text x="440" y="126">1.0</text></g>
             <text class="lab" x="0" y="44">Detection</text><text class="val" x="0" y="58">AUROC</text>
             <text class="lab" x="0" y="90">Retrieval</text><text class="val" x="0" y="104">top-1 accuracy</text>
-            <line x1="431.2" x2="438.5" y1="48" y2="48" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
-            <circle class="pt" tabindex="0" r="5" cx="431.2" cy="48" style="fill:var(--s2)" data-tip="detection · hard · 0.983"/>
-            <circle class="pt" tabindex="0" r="5" cx="438.5" cy="48" style="fill:var(--s1)" data-tip="detection · easy · 0.997"/>
-            <text class="val" x="426" y="34" text-anchor="end">0.997 → 0.983</text>
-            <line x1="169.8" x2="366.1" y1="94" y2="94" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
-            <circle class="pt" tabindex="0" r="5" cx="366.1" cy="94" style="fill:var(--s1)" data-tip="retrieval · easy · 0.857"/>
-            <circle class="pt" tabindex="0" r="5" cx="169.8" cy="94" style="fill:var(--s2)" data-tip="retrieval · hard · 0.477"/>
-            <text class="val" x="366.1" y="80" text-anchor="middle">0.857</text>
-            <text class="val" x="169.8" y="80" text-anchor="middle">0.477</text>
-            <text class="lab" x="268" y="84" text-anchor="middle" style="font-weight:600">−44%</text>
+            <line x1="432.8" x2="439" y1="48" y2="48" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
+            <circle class="pt" tabindex="0" r="5" cx="432.8" cy="48" style="fill:var(--s2)" data-tip="detection · hard · 0.986"/>
+            <circle class="pt" tabindex="0" r="5" cx="439" cy="48" style="fill:var(--s1)" data-tip="detection · easy · 0.998"/>
+            <text class="val" x="426" y="34" text-anchor="end">0.998 → 0.986</text>
+            <line x1="193" x2="357.9" y1="94" y2="94" style="stroke:var(--muted);stroke-width:2;opacity:.6"/>
+            <circle class="pt" tabindex="0" r="5" cx="357.9" cy="94" style="fill:var(--s1)" data-tip="retrieval · easy · 0.841"/>
+            <circle class="pt" tabindex="0" r="5" cx="193" cy="94" style="fill:var(--s2)" data-tip="retrieval · hard · 0.522"/>
+            <text class="val" x="357.9" y="80" text-anchor="middle">0.841</text>
+            <text class="val" x="193" y="80" text-anchor="middle">0.522</text>
+            <text class="lab" x="275.5" y="84" text-anchor="middle" style="font-weight:600">−38%</text>
           </svg>
           </div>
           <div class="tags" style="grid-column:1/-1"><span>anomaly detection</span><span>vision-language</span><span>cross-validation</span></div>
@@ -550,6 +556,8 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
 
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 <script>
+// respect reduced-motion: keep the heat sink video still
+(function(){const v=document.getElementById('hs-video');if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}})();
 // chart tooltips: hover or keyboard-focus any [data-tip] mark
 (function(){
   const tip=document.getElementById('tip');
