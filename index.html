@@ -167,6 +167,16 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .rank tr:first-child td:nth-child(2){color:var(--accent)}
 @media (max-width:520px){.rank thead{display:none}.rank tr{display:grid;grid-template-columns:32px 1fr;column-gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}.rank td{border:0;padding:0}.rank td:first-child{grid-row:span 2}.rank td:nth-child(3){grid-column:2;padding-top:2px}}
 
+.purex{border:1px solid var(--line);background:var(--bg);border-radius:3px;padding:14px 16px}
+.purex ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;counter-reset:pu}
+.purex li{counter-increment:pu;font-size:.8125rem;line-height:1.35;color:var(--muted);border-top:2px solid var(--line);padding-top:8px}
+.purex li:nth-child(3){border-top-color:var(--accent)}
+.purex li b{display:block;color:var(--fg);font-weight:600;margin-bottom:2px}
+.purex li b::before{content:counter(pu) " · ";font-family:var(--f-mono);font-weight:400;color:var(--accent)}
+.purex .src{margin:10px 0 0;font-size:.75rem;color:var(--muted)}
+.purex .src a{color:var(--accent)}
+@media (max-width:520px){.purex ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 /* INL 3D viewer */
 .rs-fig{min-width:0}
 .rs-view{position:relative;aspect-ratio:16/10;background:radial-gradient(120% 90% at 30% 20%,#141a22 0%,#07090c 70%);border-radius:3px;overflow:hidden;touch-action:pan-y}
@@ -437,13 +447,23 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           <div>
             <div class="where"><span class="label">PNNL · 2024–2025</span></div>
             <h3>Does explainable AI find the chemistry? Testing it on a reprocessing simulator</h3>
-            <p>The goal was to trace where a PUREX solvent-extraction simulator disagrees with experiments. But before you trust an explainable-AI method on real discrepancies, you have to know it finds physics, not noise. My internship built that pipeline and tested it on simulated discrepancies, where chemistry already tells you the answer.</p>
+            <p>The extraction step of PUREX is where the simulator I worked with lives: it models how uranium moves between the two phases at each stage. The goal was to trace where it disagrees with experiments. But before you trust an explainable-AI method on real discrepancies, you have to know it finds physics, not noise. My internship built that pipeline and tested it on simulated discrepancies, where chemistry already tells you the answer.</p>
             <p>I worked from 150 existing simulator runs varying three inputs: aqueous feed flow, organic feed flow and TBP solvent concentration. I aligned every run to a common duration and sampling rate, computed its error against the run closest to the Hanford PUREX flowsheet, modeled that error with random forests and LSTMs, and attributed it with SHAP.</p>
             <p><strong>It passed.</strong> SHAP ranked the inputs the way extraction chemistry predicts, and for feed flow it got the direction right too: more uranium coming in pushed the error up. The next step was pointing it at experimental data.</p>
             <span class="result">Recovered the expected drivers: TBP and feed flow ahead of organic flow</span>
           </div>
           <figure class="fig">
-            <div class="pipe" aria-label="Pipeline">
+            <div class="purex" aria-label="How PUREX works">
+              <div class="label" style="margin-bottom:8px">Background · what PUREX does</div>
+              <ol>
+                <li><b>Chop</b><span>Used fuel is cut into ~3 cm pieces</span></li>
+                <li><b>Dissolve</b><span>in hot nitric acid</span></li>
+                <li><b>Extract</b><span>TBP solvent pulls uranium and plutonium into an organic phase, stage by stage</span></li>
+                <li><b>Purify &amp; vitrify</b><span>U and Pu go on to new fuel, and the rest is glassed as waste</span></li>
+              </ol>
+              <p class="src">PUREX is the most common, state-of-the-art process for recovering uranium and plutonium from used fuel. Source: <a href="https://www.pnnl.gov/publications/flowsheet-evaluation-dissolving-used-nuclear-fuel-purex-solvent">PNNL-31863</a>.</p>
+            </div>
+            <div class="pipe" aria-label="Pipeline" style="margin-top:16px">
               <span>150 simulator runs</span><i>→</i><span>align + resample</span><i>→</i><span>error vs. reference run</span><i>→</i><span>random forest · LSTM</span><i>→</i><span>SHAP attribution</span>
             </div>
             <table class="rank">
