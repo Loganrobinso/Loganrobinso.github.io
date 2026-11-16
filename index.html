@@ -153,13 +153,13 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .tip{position:fixed;z-index:20;pointer-events:none;background:var(--fg);color:var(--bg);font-family:var(--f-mono);font-size:.75rem;padding:6px 8px;border-radius:3px;opacity:0;transition:opacity .1s;white-space:nowrap}
 .tip.on{opacity:1}
 .mini{margin-top:6px}
-@media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
+@media (max-width:520px){.chart:not(.xai) .axis,.chart:not(.xai) .val{font-size:15px}.chart:not(.xai) .lab{font-size:16px}.xai .val{font-size:14px}.xai .lab{font-size:15px}}
 
 .pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .pipe span{font-family:var(--f-mono);font-size:.6875rem;border:1px solid var(--line);background:var(--bg);padding:4px 8px;border-radius:2px;white-space:nowrap}
 .pipe i{font-style:normal;color:var(--accent);font-family:var(--f-mono);font-size:.75rem}
 
-.rank{width:100%;border-collapse:collapse;margin-top:16px;font-size:.875rem}
+.rank{width:100%;border-collapse:collapse;margin-top:6px;font-size:.875rem}
 .rank th{font-family:var(--f-mono);font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
 .rank td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
 .rank td:nth-child(2){color:var(--fg);font-weight:600;white-space:nowrap}
@@ -463,9 +463,37 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
               </ol>
               <p class="src">PUREX is the most common, state-of-the-art process for recovering uranium and plutonium from used fuel. Source: <a href="https://www.pnnl.gov/publications/flowsheet-evaluation-dissolving-used-nuclear-fuel-purex-solvent">PNNL-31863</a>.</p>
             </div>
-            <div class="pipe" aria-label="Pipeline" style="margin-top:16px">
-              <span>150 simulator runs</span><i>→</i><span>align + resample</span><i>→</i><span>error vs. reference run</span><i>→</i><span>random forest · LSTM</span><i>→</i><span>SHAP attribution</span>
-            </div>
+            <svg class="chart xai" viewBox="0 0 560 212" role="img" aria-labelledby="xai-t xai-d" style="margin-top:18px">
+              <title id="xai-t">How the discrepancy pipeline works</title>
+              <desc id="xai-d">Three panels. First, a simulation run and the reference run drift apart over time and the gap between them is shaded. Second, after aligning the runs, the gap becomes a discrepancy curve over time. Third, a model trained on that discrepancy and explained with SHAP ranks the inputs: TBP concentration highest, then aqueous feed flow, then organic feed flow.</desc>
+              <!-- panel 1: run vs reference -->
+              <path d="M10 120 C40 92 70 84 100 90 S140 70 160 52 L160 78 C140 96 115 116 90 140 S35 152 10 128 Z" style="fill:var(--accent);opacity:.16"/>
+              <path class="ln" d="M10 120 C40 92 70 84 100 90 S140 70 160 52" style="stroke:var(--accent);stroke-width:3"/>
+              <path class="ln" d="M10 128 C35 152 65 150 90 140 S140 96 160 78" style="stroke:var(--muted);stroke-width:3"/>
+              <line x1="4" x2="4" y1="40" y2="168" class="grid"/><line x1="4" x2="166" y1="168" y2="168" class="grid"/>
+              <text class="lab" x="16" y="66" style="fill:var(--accent)">a simulator run</text>
+              <text class="lab" x="22" y="186" style="fill:var(--muted)">reference run</text>
+              <text class="val" x="60" y="125">gap</text>
+              <!-- arrow 1 -->
+              <text class="val" x="198" y="96" text-anchor="middle">align +</text><text class="val" x="198" y="110" text-anchor="middle">subtract</text>
+              <path d="M178 122 H214 M208 116 L215 122 L208 128" class="ln" style="stroke:var(--muted);stroke-width:1.5"/>
+              <!-- panel 2: discrepancy -->
+              <line x1="230" x2="230" y1="40" y2="168" class="grid"/><line x1="230" x2="350" y1="128" y2="128" class="grid" style="stroke-dasharray:3 4"/><line x1="230" x2="350" y1="168" y2="168" class="grid"/>
+              <path class="ln" d="M236 128 C252 70 268 58 282 82 S300 162 312 152 S332 128 348 130" style="stroke:var(--accent);stroke-width:3"/>
+              <text class="lab" x="236" y="186">discrepancy vs. time</text>
+              <!-- arrow 2 -->
+              <text class="val" x="382" y="96" text-anchor="middle">model +</text><text class="val" x="382" y="110" text-anchor="middle">SHAP</text>
+              <path d="M362 122 H398 M392 116 L399 122 L392 128" class="ln" style="stroke:var(--muted);stroke-width:1.5"/>
+              <!-- panel 3: importance -->
+              <line x1="414" x2="414" y1="40" y2="168" class="grid"/><line x1="414" x2="556" y1="168" y2="168" class="grid"/>
+              <rect x="426" y="44" width="30" height="124" rx="3" style="fill:var(--accent)"/>
+              <rect x="472" y="104" width="30" height="64" rx="3" style="fill:var(--muted);opacity:.55"/>
+              <rect x="518" y="132" width="30" height="36" rx="3" style="fill:var(--muted);opacity:.55"/>
+              <text class="val" x="441" y="186" text-anchor="middle">TBP</text>
+              <text class="val" x="487" y="186" text-anchor="middle">aq.</text>
+              <text class="val" x="533" y="186" text-anchor="middle">org.</text>
+              <text class="lab" x="414" y="30">which input drives it?</text><text class="val" x="510" y="206" text-anchor="middle">feed flows</text><path d="M472 193 H548" class="grid"/>
+            </svg>
             <table class="rank">
               <thead><tr><th>SHAP rank</th><th>Input</th><th>Role in the chemistry</th></tr></thead>
               <tbody>
@@ -474,7 +502,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
                 <tr><td><b>3</b></td><td>Organic feed flow</td><td>Carries the solvent. Smallest effect.</td></tr>
               </tbody>
             </table>
-            <figcaption>SHAP summary for the random-forest discrepancy model at one uranium stage (organic stage 16). Redrawn from my internship results.</figcaption>
+            <figcaption>Top: PUREX in four steps. Middle: my method, redrawn from my internship talk (bar heights show rank only). Bottom: the SHAP ranking for the random-forest discrepancy model at one uranium stage (organic stage 16).</figcaption>
           </figure>
           <div class="tags" style="grid-column:1/-1"><span>surrogate modeling</span><span>explainable AI · SHAP</span><span>random forest</span><span>LSTM</span><span>nuclear fuel cycle</span></div>
         </article>
