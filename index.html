@@ -13,7 +13,7 @@
    real thermal video panel; sections are plain bands separated by hairlines. */
 :root{
   --bg:#f2f3f1; --surface:#ffffff; --fg:#171a1f; --muted:#5b616b; --line:#d8dbd8;
-  --accent:#c4471c; --accent-soft:#f6e3d9; --panel:#0e1116; --panel-fg:#c9ced6;
+  --accent:#007891; --accent-soft:#dcf3f7; --on-accent:#ffffff; --glow:none; --panel:#0e1116; --panel-fg:#c9ced6;
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
   --f-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -21,10 +21,10 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#111419; --surface:#171b21; --fg:#e7e9ec; --muted:#959ca7; --line:#2a2f37;
-  --accent:#ff8247; --accent-soft:#2b1d16; --panel:#07090c; --panel-fg:#c9ced6; color-scheme:dark}}
+  --accent:#22e3ff; --accent-soft:#0d2a31; --on-accent:#061014; --glow:0 0 18px rgba(34,227,255,.35); --panel:#07090c; --panel-fg:#c9ced6; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111419; --surface:#171b21; --fg:#e7e9ec; --muted:#959ca7; --line:#2a2f37;
-  --accent:#ff8247; --accent-soft:#2b1d16; --panel:#07090c; --panel-fg:#c9ced6; color-scheme:dark}
+  --accent:#22e3ff; --accent-soft:#0d2a31; --on-accent:#061014; --glow:0 0 18px rgba(34,227,255,.35); --panel:#07090c; --panel-fg:#c9ced6; color-scheme:dark}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
@@ -45,8 +45,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .nav ul a:hover{color:var(--fg)}
 .btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:.8125rem;text-decoration:none;padding:9px 14px;border:1px solid var(--fg);border-radius:3px;white-space:nowrap;transition:background .15s,color .15s}
 .btn:hover{background:var(--fg);color:var(--bg)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{filter:brightness(1.08);background:var(--accent);color:#fff}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:var(--glow)}
+.btn.primary:hover{filter:brightness(1.08);background:var(--accent);color:var(--on-accent)}
 @media (max-width:720px){.nav ul{display:none}.nav .btn{margin-left:auto}}
 
 /* hero */
@@ -155,6 +155,24 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .mini{margin-top:6px}
 @media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
 
+.pipe{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pipe span{font-family:var(--f-mono);font-size:.6875rem;border:1px solid var(--line);background:var(--bg);padding:4px 8px;border-radius:2px;white-space:nowrap}
+.pipe i{font-style:normal;color:var(--accent);font-family:var(--f-mono);font-size:.75rem}
+
+/* INL 3D viewer */
+.rs-fig{min-width:0}
+.rs-view{position:relative;aspect-ratio:16/10;background:radial-gradient(120% 90% at 30% 20%,#141a22 0%,#07090c 70%);border-radius:3px;overflow:hidden;touch-action:pan-y}
+.rs-view canvas{display:block;width:100%;height:100%;cursor:grab}
+.rs-view canvas:active{cursor:grabbing}
+.rs-fallback{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-size:.75rem;color:#8b939e}
+.rs-label{position:absolute;left:0;top:0;pointer-events:none;font-family:var(--f-mono);font-size:.625rem;letter-spacing:.03em;color:#cfeff6;background:rgba(7,9,12,.72);border:1px solid rgba(34,227,255,.35);padding:2px 6px;border-radius:2px;white-space:nowrap;transition:opacity .2s}
+.rs-status{position:absolute;left:10px;top:10px;font-family:var(--f-mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:#22e3ff;text-shadow:0 0 10px rgba(34,227,255,.45);pointer-events:none}
+.rs-fig figcaption{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.rs-toggle{font-family:var(--f-mono);font-size:.6875rem;background:none;border:1px solid var(--line);color:var(--muted);border-radius:2px;padding:2px 8px;cursor:pointer;flex:none}
+.rs-toggle[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+@media (pointer:coarse){.rs-hint{display:none}}
+@media (max-width:520px){.rs-label{font-size:.5625rem;padding:1px 4px}}
+
 /* pubs */
 .pubs{list-style:none;margin:0;padding:0;counter-reset:p}
 .pubs li{display:grid;grid-template-columns:72px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
@@ -235,7 +253,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <div></div>
         <div class="prose">
           <p>I'm a Computer Science PhD candidate in the <strong>Vision &amp; AI Lab (VAIL)</strong> at the University of Texas at San Antonio, advised by Dr. Amanda Fernandez. My research is multimodal machine learning for industrial inspection and anomaly detection, with a focus on laser powder bed fusion (LPBF).</p>
-          <p>I came to ML from the shop floor. My undergraduate degree is in mechanical engineering, and I spent three years training more than 100 students on lathes, mills and laser cutters. At <strong>Idaho National Laboratory</strong> I designed hardware for reactor experiments, and at <strong>Pacific Northwest National Laboratory</strong> I built interpretable models for sensor data from nuclear fuel recycling. I treat ML as a tool in service of physical systems, and I care whether a model's answer survives contact with the hardware.</p>
+          <p>I came to ML from the shop floor. My undergraduate degree is in mechanical engineering, and I spent three years training more than 100 students on lathes, mills and laser cutters. At <strong>Idaho National Laboratory</strong> I designed hardware for reactor experiments, and at <strong>Pacific Northwest National Laboratory</strong> I built explainable models of where a nuclear reprocessing simulator drifts from its reference. I treat ML as a tool in service of physical systems, and I care whether a model's answer survives contact with the hardware.</p>
           <p>I currently hold a <strong>Graduate Research Organization (GRO) appointment at Oak Ridge National Laboratory</strong>, working with Luke Scime on fast processing of near- and long-wave infrared video from powder bed fusion builds.</p>
           <ul class="themes">
             <li>Learning from very small, expensive datasets, where every printed coupon counts.</li>
@@ -407,6 +425,85 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           </div>
           <div class="tags" style="grid-column:1/-1"><span>anomaly detection</span><span>vision-language</span><span>cross-validation</span></div>
         </article>
+        <article class="proj wide" id="pnnl">
+          <div>
+            <div class="where"><span class="label">PNNL · 2024–2025</span></div>
+            <h3>Explaining where a nuclear reprocessing simulator drifts</h3>
+            <p>Simulators of spent-fuel reprocessing (PUREX solvent extraction) are only trustworthy if you know where and why they disagree with reality. I built the machine-learning groundwork for that: models that learn a simulator's discrepancy and attribute it to the inputs driving it.</p>
+            <p>I worked from 150 existing simulator runs that varied three inputs: aqueous feed flow, organic feed flow and TBP solvent concentration. I aligned every run to a common duration and sampling rate, computed its error against a reference run, modeled that error with random forests and LSTMs, and ranked the inputs with SHAP.</p>
+            <span class="result">TBP concentration drove the discrepancy ~3.6× more than any other input</span>
+          </div>
+          <figure class="fig">
+            <div class="pipe" aria-label="Pipeline">
+              <span>150 simulator runs</span><i>→</i><span>align + resample</span><i>→</i><span>error vs. reference run</span><i>→</i><span>random forest · LSTM</span><i>→</i><span>SHAP attribution</span>
+            </div>
+            <svg class="chart" viewBox="0 0 460 150" role="img" aria-labelledby="sh-t sh-d" style="margin-top:14px">
+              <title id="sh-t">Which simulator input drives the discrepancy</title>
+              <desc id="sh-d">Relative mean absolute SHAP value, TBP concentration set to 1: TBP concentration 1.00, aqueous feed flow 0.28, time 0.18, organic feed flow 0.17.</desc>
+              <g class="grid"><line x1="180" x2="180" y1="8" y2="128" style="stroke:var(--muted)"/><line x1="300" x2="300" y1="8" y2="128"/><line x1="420" x2="420" y1="8" y2="128"/></g>
+              <g class="lab" text-anchor="end">
+                <text x="170" y="26">TBP concentration</text><text x="170" y="56">Aqueous feed flow</text><text x="170" y="86">Time</text><text x="170" y="116">Organic feed flow</text>
+              </g>
+              <rect class="pt" tabindex="0" x="180" y="14" width="240" height="16" rx="2" style="fill:var(--accent)" data-tip="TBP concentration · 1.00"/>
+              <rect class="pt" tabindex="0" x="180" y="44" width="67" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="aqueous feed flow · 0.28"/>
+              <rect class="pt" tabindex="0" x="180" y="74" width="44" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="time · 0.18"/>
+              <rect class="pt" tabindex="0" x="180" y="104" width="40" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="organic feed flow · 0.17"/>
+              <g class="val"><text x="426" y="26">1.00</text><text x="253" y="56">0.28</text><text x="230" y="86">0.18</text><text x="226" y="116">0.17</text></g>
+              <g class="axis" text-anchor="middle"><text x="180" y="143">0</text><text x="300" y="143">0.5</text><text x="420" y="143">1</text></g>
+            </svg>
+            <figcaption>Mean |SHAP| of the random-forest discrepancy model for one uranium stage, scaled so TBP = 1. My diagram and chart, redrawn from my internship results.</figcaption>
+          </figure>
+          <div class="tags" style="grid-column:1/-1"><span>surrogate modeling</span><span>explainable AI · SHAP</span><span>random forest</span><span>LSTM</span><span>nuclear fuel cycle</span></div>
+        </article>
+        <article class="proj">
+          <div class="where"><span class="label">ORNL · GRO</span><span class="label flag">ongoing</span></div>
+          <h3>Real-time processing of thermal video from powder bed fusion</h3>
+          <p>Near- and long-wave infrared cameras record each layer as it melts and cools; those signatures track flaw populations and microstructure. I develop and accelerate compositing algorithms that reduce ~100 GB of LWIR/NIR video to useful measurements within minutes, so processing keeps pace with acquisition.</p>
+          <div class="tags"><span>LWIR / NIR</span><span>GPU</span><span>streaming</span><span>LPBF / EB-PBF</span></div>
+        </article>
+        <article class="proj">
+          <div class="where"><span class="label">UTSA · SPIE 2026</span></div>
+          <h3>Multimodal porosity prediction in LPBF</h3>
+          <p>Energy density alone doesn't explain porosity. I combined process parameters with build imagery and compared fusion strategies on a small dataset. Image features hurt regression but clearly helped classifying the porosity regime.</p>
+          <span class="result">DynMM: 96.7% recall · 91.7% accuracy (regime classification)</span>
+          <div class="tags"><span>multimodal fusion</span><span>small data</span><span>PyTorch</span></div>
+        </article>
+        <article class="proj" style="grid-column:1/-1">
+          <div class="where"><span class="label">UTSA · VAIL</span></div>
+          <h3>Few-shot defect segmentation for LPBF stainless steel</h3>
+          <p>Segmenting defect types the model has barely seen, on micrographs of laser-printed stainless steel. Delivered a working inference pipeline the lab can run after handoff.</p>
+          <span class="result">0.926 AUC on held-out defect classes</span>
+          <div class="tags"><span>few-shot</span><span>segmentation</span><span>transformers</span></div>
+        </article>
+        <article class="proj wide" id="inl-sensor">
+          <div>
+            <div class="where"><span class="label">INL · 2022–2023</span></div>
+            <h3>Retractable in-core sensor mechanism</h3>
+            <p>Sensors in reactor experiments drift out of calibration under long exposure. The fix I worked on: a thermocouple that a drive pushes through 20 ft of 1/8" guide tubing into the test region for a reference reading, then pulls back out.</p>
+            <p>I built the drive from the feed rolls of a MIG welding gun and a geared 12 V motor, joined by custom 3D-printed brackets on 1" extrusion. A carriage rides a rail between two limit switches that end each stroke, and a control box I wired handles insert, retract and e-stop.</p>
+            <span class="result">Drive force ≈ 20 N (peak 33 N) · needed through offset tubing ≈ 3 N</span>
+            <span class="result">~40% smaller system footprint</span>
+          </div>
+          <figure class="fig rs-fig">
+            <div class="rs-view" id="rs-view" role="img" aria-label="Interactive 3D model of the retractable sensor mechanism: a motor-driven pair of rolls pushes a carriage along a rail, feeding a thermocouple through a guide tube and pulling it back"><span class="rs-fallback">Loading 3D model…</span></div>
+            <figcaption><span>Stylized 3D reconstruction from my project poster, not the CAD. <span class="rs-hint">Drag to rotate, scroll to zoom.</span></span><button class="rs-toggle" type="button" aria-pressed="true">labels</button></figcaption>
+          </figure>
+          <div class="tags" style="grid-column:1/-1"><span>reactor hardware</span><span>mechanism design</span><span>3D printing</span><span>control wiring</span><span>Autodesk Inventor</span></div>
+        </article>
+        <article class="proj wide" id="pmd">
+          <div>
+            <div class="where"><span class="label">UTSA × SwRI · senior design · 2022</span></div>
+            <h3>Propellant management device for a micro-gravity test bench</h3>
+            <p>In orbit there's no gravity to hold liquid oxygen over a tank's outlet, so spacecraft rely on surface tension: vanes and sponges that wick propellant to the drain. Southwest Research Institute built a neutral-buoyancy test bench to study these devices on the ground, and my senior design project was a device for it.</p>
+            <p>As design engineer I worked on the geometry and the assembly drawings: a perforated core ringed by 28 sponge fins, with 4 curved vanes that follow the wall of a 15-inch spherical tank. Fins and vanes slot in and swap out without rebuilding the core, so new configurations can be tested cheaply. It's built from clear polycarbonate, so you can watch the fluid, and stainless steel.</p>
+            <span class="result">Capillary analysis: no dripping at 0.001–0.002 g · checked in Surface Evolver and FEA</span>
+          </div>
+          <figure class="fig">
+            <div class="plate" style="padding:0;background:#0b1218;border-color:#1f2a33"><img src="img/pmd-exploded-blueprint.webp" width="1000" height="993" alt="Exploded assembly drawing of the propellant management device in cyan line art: bolts and washers on top, a slotted centering ring, four long curved vanes, a ring of 28 perforated fins, and the perforated core module with its base" loading="lazy" style="max-width:420px;margin-inline:auto"></div>
+            <figcaption>My exploded assembly drawing. 1 core module · 2 core base · 3 centering ring · 4 vanes (×4) · 5 fins (×28) · 6–7 stainless screws and washers (×8)</figcaption>
+          </figure>
+          <div class="tags" style="grid-column:1/-1"><span>capillary fluid mechanics</span><span>SOLIDWORKS</span><span>Surface Evolver</span><span>FEA</span><span>design for manufacture</span></div>
+        </article>
         <article class="proj wide">
           <div>
             <div class="where"><span class="label">Side project · FLIR Boson LWIR</span></div>
@@ -425,45 +522,6 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
             </figure>
           </div>
           <div class="tags" style="grid-column:1/-1"><span>LWIR thermal imaging</span><span>inspection</span><span>image registration</span><span>Python / OpenCV</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">ORNL · GRO</span><span class="label flag">ongoing</span></div>
-          <h3>Real-time processing of thermal video from powder bed fusion</h3>
-          <p>Near- and long-wave infrared cameras record each layer as it melts and cools; those signatures track flaw populations and microstructure. I develop and accelerate compositing algorithms that reduce ~100 GB of LWIR/NIR video to useful measurements within minutes, so processing keeps pace with acquisition.</p>
-          <div class="tags"><span>LWIR / NIR</span><span>GPU</span><span>streaming</span><span>LPBF / EB-PBF</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">UTSA · SPIE 2026</span></div>
-          <h3>Multimodal porosity prediction in LPBF</h3>
-          <p>Energy density alone doesn't explain porosity. I combined process parameters with build imagery and compared fusion strategies on a small dataset. Image features hurt regression but clearly helped classifying the porosity regime.</p>
-          <span class="result">DynMM: 96.7% recall · 91.7% accuracy (regime classification)</span>
-          <div class="tags"><span>multimodal fusion</span><span>small data</span><span>PyTorch</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">INL · 2022–2023</span></div>
-          <h3>Retractable in-core sensor deployment mechanism</h3>
-          <p>Designed a mechanism to deploy and retract sensors inside a reactor experiment. Modeled in Inventor, prototyped to check fit, clearances and thermal behavior, and iterated on test results.</p>
-          <span class="result">~40% smaller system footprint</span>
-          <div class="tags"><span>reactor hardware</span><span>Autodesk Inventor</span><span>rapid prototyping</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">PNNL · 2024</span></div>
-          <h3>Interpretable ML for nuclear fuel recycling process data</h3>
-          <p>Built feature engineering, modeling and evaluation pipelines for heterogeneous process sensor data, and used interpretable methods to tie predictions back to process behavior so domain experts could check them.</p>
-          <div class="tags"><span>process monitoring</span><span>anomaly detection</span><span>explainable AI</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">UTSA · VAIL</span></div>
-          <h3>Few-shot defect segmentation for LPBF stainless steel</h3>
-          <p>Segmenting defect types the model has barely seen, on micrographs of laser-printed stainless steel. Delivered a working inference pipeline the lab can run after handoff.</p>
-          <span class="result">0.926 AUC on held-out defect classes</span>
-          <div class="tags"><span>few-shot</span><span>segmentation</span><span>transformers</span></div>
-        </article>
-        <article class="proj">
-          <div class="where"><span class="label">SwRI / UTSA capstone · 2022</span></div>
-          <h3>Propellant management device</h3>
-          <p>Used surface-tension geometry to control fluid transport in a tightly constrained tank. Balanced micro-porosity against structural strength, delivered within a 15% budget constraint, and checked the design against CFD and test data.</p>
-          <div class="tags"><span>fluids</span><span>CFD</span><span>design for manufacture</span></div>
         </article>
       </div>
     </div>
@@ -519,7 +577,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <ol class="tl">
           <li class="now"><span class="yr">2026 – now</span><div><div class="org">Oak Ridge National Laboratory</div><div class="what">Graduate Research Organization appointment · thermal process monitoring for AM</div></div></li>
           <li class="now"><span class="yr">2023 – now</span><div><div class="org">UTSA · Vision &amp; AI Lab</div><div class="what">Graduate Researcher · PhD Computer Science, coursework complete (GPA 3.91), expected Dec 2028</div></div></li>
-          <li><span class="yr">2024</span><div><div class="org">Pacific Northwest National Laboratory</div><div class="what">AI/ML Research Intern · Richland, WA · nuclear process sensor data</div></div></li>
+          <li><span class="yr">2024 – 2025</span><div><div class="org">Pacific Northwest National Laboratory</div><div class="what">Masters Intern · Richland, WA · explainable ML for nuclear reprocessing simulations</div></div></li>
           <li><span class="yr">2023</span><div><div class="org">UTSA · Extreme Environments Materials Lab</div><div class="what">Research Fellow · controlled synthesis experiments and microstructure image analysis</div></div></li>
           <li><span class="yr">2022 – 2023</span><div><div class="org">Idaho National Laboratory</div><div class="what">Mechanical Design Intern · Idaho Falls, ID · reactor experiment hardware</div></div></li>
           <li><span class="yr">2022</span><div><div class="org">SwRI / UTSA capstone</div><div class="what">Design Engineer · propellant management device</div></div></li>
@@ -590,6 +648,29 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
   addEventListener('scroll',hide,{passive:true});
 })();
 (function(){const v=document.getElementById('hero-video');if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}})();
+</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+// load the INL 3D model only when its card scrolls near the screen, and pause it when off screen
+const host=document.getElementById('rs-view'); const btn=document.querySelector('.rs-toggle');
+if(host){
+  let viewer=null, loading=false;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io=new IntersectionObserver(async ([e])=>{
+    if(e.isIntersecting && !viewer && !loading){
+      loading=true;
+      try{
+        const {mountRetractableSensor}=await import('./js/retract-sensor.js');
+        host.querySelector('.rs-fallback')?.remove();
+        viewer=mountRetractableSensor(host,{reducedMotion:reduce, showLabels:innerWidth>520});
+        if(innerWidth<=520) btn.setAttribute('aria-pressed','false');
+      }catch(err){ host.querySelector('.rs-fallback').textContent='3D view unavailable in this browser'; console.error(err); }
+    }
+    if(viewer){ e.isIntersecting ? viewer.start() : viewer.stop(); }
+  },{rootMargin:'200px'});
+  io.observe(host);
+  btn.addEventListener('click',()=>{const on=btn.getAttribute('aria-pressed')!=='true';btn.setAttribute('aria-pressed',String(on));viewer?.setLabels(on);});
+}
 </script>
 </body>
 </html>
