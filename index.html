@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one 1080px column, a sticky mono nav, a hero split between thesis text and a live
-   thermal "layer scan" panel; sections are plain bands separated by hairlines. */
+   real thermal video panel; sections are plain bands separated by hairlines. */
 :root{
   --bg:#f2f3f1; --surface:#ffffff; --fg:#171a1f; --muted:#5b616b; --line:#d8dbd8;
   --accent:#c4471c; --accent-soft:#f6e3d9; --panel:#0e1116; --panel-fg:#c9ced6;
@@ -60,7 +60,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .status{color:var(--fg)}
 .cta{display:flex;flex-wrap:wrap;gap:10px}
 .scan{background:var(--panel);border-radius:4px;overflow:hidden;color:var(--panel-fg)}
-.scan canvas{display:block;width:100%;aspect-ratio:1/1;max-width:100%}
+.scan video{display:block;width:100%;height:auto;aspect-ratio:616/492;background:#000}
 .scan figcaption{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-top:1px solid #1f242c;font-family:var(--f-mono);font-size:.6875rem;letter-spacing:.04em}
 .cbar{height:6px;width:90px;align-self:center;border-radius:1px;background:linear-gradient(90deg,#000004,#420a68,#932667,#dd513a,#fca50a,#fcffa4)}
 @media (max-width:820px){.hero{grid-template-columns:1fr;gap:36px;padding-block:36px 48px}.scan{max-width:440px}}
@@ -154,7 +154,6 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .tip.on{opacity:1}
 .mini{margin-top:6px}
 @media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
-@media (max-width:520px){.chart .axis,.chart .val{font-size:15px}.chart .lab{font-size:16px}}
 
 /* pubs */
 .pubs{list-style:none;margin:0;padding:0;counter-reset:p}
@@ -218,9 +217,11 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <a class="btn" href="#contact">Get in touch</a>
       </div>
     </div>
-    <figure class="scan" aria-label="Animated simulation of a laser scanning one powder-bed layer, colored by temperature">
-      <canvas id="scan" width="480" height="480"></canvas>
-      <figcaption><span>LPBF layer scan · simulated thermal field</span><span class="cbar" aria-hidden="true"></span></figcaption>
+    <figure class="scan">
+      <video id="hero-video" width="616" height="492" autoplay muted loop playsinline preload="auto" poster="img/hero-handprint-poster.webp" aria-label="Thermal video: a hand presses flat against a surface, lifts away, and its warm print slowly fades from the edges inward">
+        <source src="img/hero-handprint.mp4" type="video/mp4">
+      </video>
+      <figcaption><span>My handprint fading away · FLIR Boson LWIR, real footage</span><span class="cbar" aria-hidden="true"></span></figcaption>
     </figure>
   </header>
 
@@ -268,7 +269,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           <figure class="fig">
             <div class="plate">
               <!-- copy docs/heatsink_3d_render.mp4 and .gif from the PINN repo into img/ -->
-              <video id="hs-video" width="896" height="484" autoplay muted loop playsinline preload="metadata" aria-label="3D heat sink colored by temperature rise, slowly swinging side to side; hottest at the base center under the chip, cooling toward the outer fins" style="display:block;width:100%;height:auto">
+              <video id="hs-video" width="896" height="484" autoplay muted loop playsinline preload="metadata" poster="img/pinn-heatsink-3d.webp" aria-label="3D heat sink colored by temperature rise, slowly swinging side to side; hottest at the base center under the chip, cooling toward the outer fins" style="display:block;width:100%;height:auto">
                 <source src="img/heatsink_3d_render.mp4" type="video/mp4">
                 <img src="img/heatsink_3d_render.gif" width="646" height="349" alt="3D heat sink colored by temperature rise, hottest at the base center under the chip, cooling toward the outer fins">
               </video>
@@ -405,6 +406,25 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           </svg>
           </div>
           <div class="tags" style="grid-column:1/-1"><span>anomaly detection</span><span>vision-language</span><span>cross-validation</span></div>
+        </article>
+        <article class="proj wide">
+          <div>
+            <div class="where"><span class="label">Side project · FLIR Boson LWIR</span></div>
+            <h3>Thermal inspection of a running steam machine</h3>
+            <p>I pulled the front panel off a steam machine while it was running and filmed it with a longwave infrared camera. The honeycomb heater grid is the hottest thing in view, and from the side the heat spreads across the top of the casing.</p>
+            <p><strong>Does the grid heat evenly?</strong> I compared every patch of honeycomb with the rest of its own panel across 64 frames. No interior patch ran consistently cooler. The only persistent cold readings sat on the frame rails and the far edge of the grid, where the camera sees the cells at an angle.</p>
+            <p style="font-size:.8125rem">The app recorded color video with auto-contrast on, so I recovered a relative scale from the color palette and only compared spots within the same frame. Lens specks are filled with real pixels from aligned neighboring frames, not painted over.</p>
+          </div>
+          <div>
+            <figure class="fig">
+              <div class="plate" style="padding:0;background:#000;display:grid;grid-template-columns:1.47fr 1fr;gap:2px">
+                <img src="img/steam-heater-grid.webp" width="432" height="293" alt="Thermal image of the exposed heater: four honeycomb panels glowing evenly, separated by dark dividers" loading="lazy" style="height:100%;object-fit:cover">
+                <img src="img/steam-casing-side.webp" width="640" height="435" alt="Thermal image of the steam machine from the side, with the top of the casing glowing warm against a dark background" loading="lazy" style="height:100%;object-fit:cover">
+              </div>
+              <figcaption>Left: heater grid with the front panel off. Right: the casing from the side.</figcaption>
+            </figure>
+          </div>
+          <div class="tags" style="grid-column:1/-1"><span>LWIR thermal imaging</span><span>inspection</span><span>image registration</span><span>Python / OpenCV</span></div>
         </article>
         <article class="proj">
           <div class="where"><span class="label">ORNL · GRO</span><span class="label flag">ongoing</span></div>
@@ -569,35 +589,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
     el.addEventListener('focus',()=>show(el));el.addEventListener('blur',hide)});
   addEventListener('scroll',hide,{passive:true});
 })();
-(function(){
-  const cv=document.getElementById('scan'); if(!cv) return;
-  const ctx=cv.getContext('2d'); const N=96, px=cv.width/N;
-  const T=new Float32Array(N*N);
-  // inferno-like colormap stops
-  const stops=[[0,[5,4,14]],[.18,[40,11,84]],[.38,[120,28,109]],[.58,[200,62,76]],[.78,[245,125,21]],[1,[252,255,164]]];
-  function cmap(t){t=Math.max(0,Math.min(1,t));for(let i=1;i<stops.length;i++){if(t<=stops[i][0]){const[a,ca]=stops[i-1],[b,cb]=stops[i];const f=(t-a)/(b-a);return`rgb(${ca[0]+(cb[0]-ca[0])*f|0},${ca[1]+(cb[1]-ca[1])*f|0},${ca[2]+(cb[2]-ca[2])*f|0})`}}return'rgb(252,255,164)'}
-  // part outline: a rounded square with a circular hole
-  const inPart=(x,y)=>{const cx=N/2,cy=N/2;const dx=Math.abs(x-cx),dy=Math.abs(y-cy);if(dx>36||dy>36)return false;if(Math.hypot(x-cx,y-cy)<12)return false;if(dx>28&&dy>28&&Math.hypot(dx-28,dy-28)>8)return false;return true};
-  // build a serpentine hatch path, rotated each layer
-  let path=[],layer=0;
-  function buildPath(){path=[];const rot=(layer%2);for(let r=4;r<N-4;r+=2){const row=[];for(let c=4;c<N-4;c++){const x=rot?r:c,y=rot?c:r;if(inPart(x,y))row.push([x,y])}if(((r/2)|0)%2)row.reverse();path.push(...row)}}
-  buildPath(); let k=0;
-  function step(n){for(let s=0;s<n;s++){
-      for(let i=0;i<T.length;i++)T[i]*=0.985;
-      if(k>=path.length){layer++;buildPath();k=0}
-      const[x,y]=path[k++];
-      for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=N||yy>=N)continue;const v=Math.exp(-(dx*dx+dy*dy)/2.2);const j=yy*N+xx;T[j]=Math.min(1,T[j]+v*0.9)}
-  }}
-  function draw(){
-    ctx.fillStyle='#05040e';ctx.fillRect(0,0,cv.width,cv.height);
-    for(let y=0;y<N;y++)for(let x=0;x<N;x++){const t=T[y*N+x];const part=inPart(x,y);if(t<0.02&&!part)continue;ctx.fillStyle=cmap(part?0.06+t:t);ctx.fillRect(x*px,y*px,px+0.5,px+0.5)}
-    ctx.fillStyle='rgba(201,206,214,.7)';ctx.font='11px "JetBrains Mono",monospace';
-    ctx.fillText('layer '+String(214+layer).padStart(4,'0'),12,20);
-  }
-  step(900); draw();
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let last=0;(function loop(ts){if(ts-last>33){step(6);draw();last=ts}requestAnimationFrame(loop)})(0);
-})();
+(function(){const v=document.getElementById('hero-video');if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}})();
 </script>
 </body>
 </html>
