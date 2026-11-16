@@ -159,6 +159,14 @@ section.band{border-top:1px solid var(--line);padding-block:64px}
 .pipe span{font-family:var(--f-mono);font-size:.6875rem;border:1px solid var(--line);background:var(--bg);padding:4px 8px;border-radius:2px;white-space:nowrap}
 .pipe i{font-style:normal;color:var(--accent);font-family:var(--f-mono);font-size:.75rem}
 
+.rank{width:100%;border-collapse:collapse;margin-top:16px;font-size:.875rem}
+.rank th{font-family:var(--f-mono);font-size:.6875rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+.rank td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--muted)}
+.rank td:nth-child(2){color:var(--fg);font-weight:600;white-space:nowrap}
+.rank td b{font-family:var(--f-display);font-size:1.5rem;line-height:1;color:var(--accent)}
+.rank tr:first-child td:nth-child(2){color:var(--accent)}
+@media (max-width:520px){.rank thead{display:none}.rank tr{display:grid;grid-template-columns:32px 1fr;column-gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}.rank td{border:0;padding:0}.rank td:first-child{grid-row:span 2}.rank td:nth-child(3){grid-column:2;padding-top:2px}}
+
 /* INL 3D viewer */
 .rs-fig{min-width:0}
 .rs-view{position:relative;aspect-ratio:16/10;background:radial-gradient(120% 90% at 30% 20%,#141a22 0%,#07090c 70%);border-radius:3px;overflow:hidden;touch-action:pan-y}
@@ -253,7 +261,7 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <div></div>
         <div class="prose">
           <p>I'm a Computer Science PhD candidate in the <strong>Vision &amp; AI Lab (VAIL)</strong> at the University of Texas at San Antonio, advised by Dr. Amanda Fernandez. My research is multimodal machine learning for industrial inspection and anomaly detection, with a focus on laser powder bed fusion (LPBF).</p>
-          <p>I came to ML from the shop floor. My undergraduate degree is in mechanical engineering, and I spent three years training more than 100 students on lathes, mills and laser cutters. At <strong>Idaho National Laboratory</strong> I designed hardware for reactor experiments, and at <strong>Pacific Northwest National Laboratory</strong> I built explainable models of where a nuclear reprocessing simulator drifts from its reference. I treat ML as a tool in service of physical systems, and I care whether a model's answer survives contact with the hardware.</p>
+          <p>I came to ML from the shop floor. My undergraduate degree is in mechanical engineering, and I spent three years training more than 100 students on lathes, mills and laser cutters. At <strong>Idaho National Laboratory</strong> I designed hardware for reactor experiments, and at <strong>Pacific Northwest National Laboratory</strong> I tested whether explainable AI recovers known chemistry from a nuclear reprocessing simulator. I treat ML as a tool in service of physical systems, and I care whether a model's answer survives contact with the hardware.</p>
           <p>I currently hold a <strong>Graduate Research Organization (GRO) appointment at Oak Ridge National Laboratory</strong>, working with Luke Scime on fast processing of near- and long-wave infrared video from powder bed fusion builds.</p>
           <ul class="themes">
             <li>Learning from very small, expensive datasets, where every printed coupon counts.</li>
@@ -428,30 +436,25 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
         <article class="proj wide" id="pnnl">
           <div>
             <div class="where"><span class="label">PNNL · 2024–2025</span></div>
-            <h3>Explaining where a nuclear reprocessing simulator drifts</h3>
-            <p>Simulators of spent-fuel reprocessing (PUREX solvent extraction) are only trustworthy if you know where and why they disagree with reality. I built the machine-learning groundwork for that: models that learn a simulator's discrepancy and attribute it to the inputs driving it.</p>
-            <p>I worked from 150 existing simulator runs that varied three inputs: aqueous feed flow, organic feed flow and TBP solvent concentration. I aligned every run to a common duration and sampling rate, computed its error against a reference run, modeled that error with random forests and LSTMs, and ranked the inputs with SHAP.</p>
-            <span class="result">TBP concentration drove the discrepancy ~3.6× more than any other input</span>
+            <h3>Does explainable AI find the chemistry? Testing it on a reprocessing simulator</h3>
+            <p>The goal was to trace where a PUREX solvent-extraction simulator disagrees with experiments. But before you trust an explainable-AI method on real discrepancies, you have to know it finds physics, not noise. My internship built that pipeline and tested it on simulated discrepancies, where chemistry already tells you the answer.</p>
+            <p>I worked from 150 existing simulator runs varying three inputs: aqueous feed flow, organic feed flow and TBP solvent concentration. I aligned every run to a common duration and sampling rate, computed its error against the run closest to the Hanford PUREX flowsheet, modeled that error with random forests and LSTMs, and attributed it with SHAP.</p>
+            <p><strong>It passed.</strong> SHAP ranked the inputs the way extraction chemistry predicts, and for feed flow it got the direction right too: more uranium coming in pushed the error up. The next step was pointing it at experimental data.</p>
+            <span class="result">Recovered the expected drivers: TBP and feed flow ahead of organic flow</span>
           </div>
           <figure class="fig">
             <div class="pipe" aria-label="Pipeline">
               <span>150 simulator runs</span><i>→</i><span>align + resample</span><i>→</i><span>error vs. reference run</span><i>→</i><span>random forest · LSTM</span><i>→</i><span>SHAP attribution</span>
             </div>
-            <svg class="chart" viewBox="0 0 460 150" role="img" aria-labelledby="sh-t sh-d" style="margin-top:14px">
-              <title id="sh-t">Which simulator input drives the discrepancy</title>
-              <desc id="sh-d">Relative mean absolute SHAP value, TBP concentration set to 1: TBP concentration 1.00, aqueous feed flow 0.28, time 0.18, organic feed flow 0.17.</desc>
-              <g class="grid"><line x1="180" x2="180" y1="8" y2="128" style="stroke:var(--muted)"/><line x1="300" x2="300" y1="8" y2="128"/><line x1="420" x2="420" y1="8" y2="128"/></g>
-              <g class="lab" text-anchor="end">
-                <text x="170" y="26">TBP concentration</text><text x="170" y="56">Aqueous feed flow</text><text x="170" y="86">Time</text><text x="170" y="116">Organic feed flow</text>
-              </g>
-              <rect class="pt" tabindex="0" x="180" y="14" width="240" height="16" rx="2" style="fill:var(--accent)" data-tip="TBP concentration · 1.00"/>
-              <rect class="pt" tabindex="0" x="180" y="44" width="67" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="aqueous feed flow · 0.28"/>
-              <rect class="pt" tabindex="0" x="180" y="74" width="44" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="time · 0.18"/>
-              <rect class="pt" tabindex="0" x="180" y="104" width="40" height="16" rx="2" style="fill:var(--muted);opacity:.55" data-tip="organic feed flow · 0.17"/>
-              <g class="val"><text x="426" y="26">1.00</text><text x="253" y="56">0.28</text><text x="230" y="86">0.18</text><text x="226" y="116">0.17</text></g>
-              <g class="axis" text-anchor="middle"><text x="180" y="143">0</text><text x="300" y="143">0.5</text><text x="420" y="143">1</text></g>
-            </svg>
-            <figcaption>Mean |SHAP| of the random-forest discrepancy model for one uranium stage, scaled so TBP = 1. My diagram and chart, redrawn from my internship results.</figcaption>
+            <table class="rank">
+              <thead><tr><th>SHAP rank</th><th>Input</th><th>Role in the chemistry</th></tr></thead>
+              <tbody>
+                <tr><td><b>1</b></td><td>TBP concentration</td><td>The extractant. Uranium extraction scales roughly with its square.</td></tr>
+                <tr><td><b>2</b></td><td>Aqueous feed flow</td><td>Sets how much uranium enters. Higher flow → larger error, as expected.</td></tr>
+                <tr><td><b>3</b></td><td>Organic feed flow</td><td>Carries the solvent. Smallest effect.</td></tr>
+              </tbody>
+            </table>
+            <figcaption>SHAP summary for the random-forest discrepancy model at one uranium stage (organic stage 16). Redrawn from my internship results.</figcaption>
           </figure>
           <div class="tags" style="grid-column:1/-1"><span>surrogate modeling</span><span>explainable AI · SHAP</span><span>random forest</span><span>LSTM</span><span>nuclear fuel cycle</span></div>
         </article>
