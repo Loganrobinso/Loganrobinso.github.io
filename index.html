@@ -555,24 +555,37 @@ footer{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute
           </figure>
           <div class="tags" style="grid-column:1/-1"><span>capillary fluid mechanics</span><span>SOLIDWORKS</span><span>Surface Evolver</span><span>FEA</span><span>design for manufacture</span></div>
         </article>
-        <article class="proj wide">
+        <article class="proj wide" id="fuel-rod">
           <div>
-            <div class="where"><span class="label">Side project · FLIR Boson LWIR</span></div>
-            <h3>Thermal inspection of a running steam machine</h3>
-            <p>I pulled the front panel off a steam machine while it was running and filmed it with a longwave infrared camera. The honeycomb heater grid is the hottest thing in view, and from the side the heat spreads across the top of the casing.</p>
-            <p><strong>Does the grid heat evenly?</strong> I compared every patch of honeycomb with the rest of its own panel across 64 frames. No interior patch ran consistently cooler. The only persistent cold readings sat on the frame rails and the far edge of the grid, where the camera sees the cells at an angle.</p>
-            <p style="font-size:.8125rem">The app recorded color video with auto-contrast on, so I recovered a relative scale from the color palette and only compared spots within the same frame. Lens specks are filled with real pixels from aligned neighboring frames, not painted over.</p>
+            <div class="where"><span class="label">Side project · 2026</span></div>
+            <h3>PINN fuel rod: temperature in a PWR fuel pin</h3>
+            <p>A physics-informed neural network that learns the temperature across a pressurized-water-reactor fuel pin (UO&#8322; pellet, helium gap, Zircaloy-4 cladding, water coolant) from the heat equation alone. It never sees a temperature value. Its loss is the residual of the conduction equation plus the boundary and interface conditions.</p>
+            <p>The heat source comes from an OpenMC Monte Carlo pin cell (4.95% enriched fresh fuel, 17&times;17 lattice pitch), which puts about 7% more power at the pellet rim than the average. I score the PINN against an exact radial solution. One small network per material lets the slope jump where conductivity changes 30&times;; Adam gets it close and L-BFGS takes the last few kelvin.</p>
+            <span class="result">Centreline 1271 K vs 1272 K exact · max error 1.0 K · RMS 0.3 K</span>
           </div>
-          <div>
-            <figure class="fig">
-              <div class="plate" style="padding:0;background:#000;display:grid;grid-template-columns:1.47fr 1fr;gap:2px">
-                <img src="img/steam-heater-grid.webp" width="432" height="293" alt="Thermal image of the exposed heater: four honeycomb panels glowing evenly, separated by dark dividers" loading="lazy" style="height:100%;object-fit:cover">
-                <img src="img/steam-casing-side.webp" width="640" height="435" alt="Thermal image of the steam machine from the side, with the top of the casing glowing warm against a dark background" loading="lazy" style="height:100%;object-fit:cover">
-              </div>
-              <figcaption>Left: heater grid with the front panel off. Right: the casing from the side.</figcaption>
-            </figure>
+          <figure class="fig">
+            <div class="plate"><img src="img/pin_cutaway.png" width="1066" height="1118" alt="3D cut-away of a fuel pin coloured by temperature: bright yellow at the centre near 1270 K, fading to dark purple at the cladding near 600 K" loading="lazy" style="max-width:340px;margin-inline:auto"></div>
+            <figcaption>Cut-away of the pin at 20 kW/m. Most of the temperature drop is inside the pellet; the thin helium gap adds another 130 K.</figcaption>
+          </figure>
+          <figure class="fig" style="grid-column:1/-1">
+            <div class="plate"><img src="img/pinn_learning.gif" width="990" height="414" alt="Animation of the neural network's predicted temperature across the fuel pin converging onto the exact curve during training, with the physics loss and maximum error falling on a log plot beside it" loading="lazy"></div>
+            <figcaption>The PINN's temperature profile (red) converging on the exact solution (black) during training, using physics only.</figcaption>
+          </figure>
+          <figure class="fig" style="grid-column:1/-1">
+            <div class="plate"><img src="img/flux_map.png" width="2142" height="748" alt="Three maps of the pin cell cross-section: thermal flux lowest at the pellet centre, fast flux nearly flat, and fission power highest at the pellet rim" loading="lazy"></div>
+            <figcaption>OpenMC pin cell: water slows the neutrons, so the pellet rim absorbs them first and runs hotter.</figcaption>
+          </figure>
+          <div style="grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px">
+            <div class="where"><span class="label">Add-on · vibration at sea</span></div>
+            <p>I also checked whether one rod span between spacer grids survives on a ship. A beam formula and a 3D CalculiX model agree within 1% on the first three modes. Hot, with pellets and water added mass, the second mode lands on a screening estimate of the vortex-shedding frequency. Ship roll and heave add only about 4 MPa of bending stress.</p>
+            <span class="result">Hot f2 105.2 Hz vs 105 Hz shedding screen · FEA vs beam theory within 1%</span>
+            <p style="font-size:.8125rem">A simplified study, not a design check. The 5 m/s coolant speed is axial, so the shedding check is deliberately pessimistic. Real grids hold the rod stiffer than pins, and grid-to-rod fretting, not modelled here, is what actually wears rods.</p>
           </div>
-          <div class="tags" style="grid-column:1/-1"><span>LWIR thermal imaging</span><span>inspection</span><span>image registration</span><span>Python / OpenCV</span></div>
+          <figure class="fig" style="grid-column:1/-1">
+            <div class="plate"><img src="img/modes.gif" width="880" height="400" alt="Animation of the first three bending modes of a fuel rod span pinned at both ends: one bow at 26.4 Hz, an S shape at 105.2 Hz flagged as near the 105 Hz shedding frequency, and three bows at 235.4 Hz" loading="lazy" style="max-width:720px;margin-inline:auto"></div>
+            <figcaption>First three bending modes of the hot span, frequencies from the 3D CalculiX model. Shapes drawn as pinned-beam modes, motion exaggerated.</figcaption>
+          </figure>
+          <div class="tags" style="grid-column:1/-1"><span>PINN</span><span>PyTorch</span><span>OpenMC</span><span>heat conduction</span><span>modal analysis</span><span>flow-induced vibration</span><span>CalculiX</span></div>
         </article>
       </div>
     </div>
